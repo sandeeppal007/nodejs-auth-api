@@ -4,12 +4,15 @@ import dotenv from "dotenv";
 import { connecDB } from "./db/connectdb.js";
 import router from "./routes/auth.route.js";
 import authRoutes from "./routes/auth.route.js";
+import cookieParser from "cookie-parser";
+
 
 const app = express();
 const PORT = process.env.PORT || 5000;
 
 // middleware
 app.use(express.json());
+app.use(cookieParser());
 app.use("/api/auth", authRoutes);
  //allows us to parse incoming requests :req.body
 
