@@ -1,5 +1,6 @@
+
 import bcryptjs from "bcryptjs";
-import crypto from "crypto";
+
 import { User } from "../models/user.model.js";
 import { generateTokenAndSetCookie,generateResetPasswordToken } from "../utils/generateTokenAndSetCookies.js";
 import { sendVerificationEmail,sendForgotPasswordEmail,sendResetSuccessEmail } from "../mailtrap/email.js";
@@ -146,7 +147,7 @@ export const forgotPassword = async (req,res)=>{
       return res.status(400).json({succeess:false,message:"Email id not registred"})
     }
 
- const resetToken= crypto.randomBytes(20).toString("hex")
+ const resetToken= await bcryptjs.hash("helloworlds123", 10);
 const resetPasswordTokenExpiresAt = Date.now() + 1 * 60 * 60 * 1000;
 
 
@@ -211,23 +212,18 @@ return res.status(400).json({success:false,message:"password not match"})
 }
 
 
-export const checkAuth = async(req,res)=>{
-  try {
-    const user = await User.findById(req.userId);
-    if(!user){
-      return res.status(400).json({success:false,message:"user not found"})
+export const checkAuth = async (req, res) => {
+	try {
+		const user = await User.findById(req.userId).select("-password");
+		if (!user) {
+			return res.status(400).json({ success: false, message: "User not found" });
+		}
 
-    }
-
-    res.status(200).json({succes:true,user:{
-      ...User._doc,
-      password:undefined
-    }})
-
-  } catch (error) {
-    console.log("error in checkAuth",error);
-    res.status(400).json({succeess:false,message:error.message})
-  }
-}
+		res.status(200).json({ success: true, user });
+	} catch (error) {
+		console.log("Error in checkAuth ", error);
+		res.status(400).json({ success: false, message: error.message });
+	}
+};
 
 
