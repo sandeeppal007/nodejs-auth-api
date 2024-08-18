@@ -3,10 +3,42 @@ import EmailVerification from "./pages/EmailVerification"
 
 import LoginPage from "./pages/LoginPage"
 import SignUpPage from "./pages/SignUpPage"
-import {Route,Routes} from "react-router-dom"
+import {Navigate, replace, Route,Routes} from "react-router-dom"
 import { Toaster } from "react-hot-toast"
 import { useAuthStore } from "./store/authStore"
 import { useEffect } from "react"
+import Dashborad from "./pages/Dashborad"
+import LoadingSpinner from "./components/LoadingSpinner"
+
+
+// redirect 
+
+
+const ProtectedRoute = ({ children }) => {
+	const { isAuthenticated, user } = useAuthStore();
+
+	if (!isAuthenticated) {
+		return <Navigate to='/login' replace />;
+	}
+
+	if (!user.isVerified) {
+		return <Navigate to='/verify-email' replace />;
+	}
+
+	return children;
+};
+
+const RedirectAuthenticatedUser = ({ children }) => {
+	const { isAuthenticated, user } = useAuthStore();
+
+	if (isAuthenticated && user.isVerified) {
+		return <Navigate to='/' replace />;
+	}
+
+	return children;
+};
+
+
 
 
 function App() {
@@ -17,8 +49,7 @@ useEffect(()=>{
 checkAuth();
 },[checkAuth])
 
-console.log("isAuthenticated",isAuthenticated)
-console.log(user)
+if(isCheckingAuth) return <LoadingSpinner/>
 
   return (
     <>
@@ -50,12 +81,32 @@ console.log(user)
      />
 
      <Routes>
-      <Route path="/" element={"Home"}/>
-      <Route path="/signup" element={<SignUpPage/>}/>
+      <Route path="/" element={
+        <ProtectedRoute>
+  <Dashborad/>
+        </ProtectedRoute>
+        
+      }/>
+      <Route path="/signup" element={
+        <RedirectAuthenticatedUser>
+          <SignUpPage/>
+        </RedirectAuthenticatedUser>
+      }
+          
+          />
     
-      <Route path="/verify-email" element={<EmailVerification/>}/>
+      <Route path="/verify-email" element={
 
-      <Route path="/login" element={<LoginPage/>}/>
+        
+        <EmailVerification/>
+        
+        }/>
+
+      <Route path="/login" element={
+        <RedirectAuthenticatedUser>
+          <LoginPage/>
+        </RedirectAuthenticatedUser>
+      }/>
      </Routes>
      <Toaster/>
 

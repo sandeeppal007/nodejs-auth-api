@@ -3,14 +3,19 @@ import { motion } from "framer-motion";
 import { Mail, Lock,Loader } from "lucide-react";
 import { Link } from "react-router-dom";
 import Input from "../components/Input.jsx";
+import { useAuthStore } from "../store/authStore.js";
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const isLoading = false;
+  const {login,isLoading,error} = useAuthStore();
 
 
-  const handleLogin = () =>{
+
+
+  const handleLogin = async(e) =>{
+e.preventDefault();
+await login(email,password)
 
   }
 
@@ -29,7 +34,7 @@ const LoginPage = () => {
           <Input
             icon={Mail}
             type="email"
-            placeholder="Full Name"
+            placeholder="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
@@ -49,7 +54,7 @@ const LoginPage = () => {
             </Link>
           </div>
 
-
+{error && <p className="text-red-500 font-semibold mb-2">{error} </p>}
 
           <motion.button
             className="

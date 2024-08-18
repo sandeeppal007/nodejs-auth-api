@@ -212,6 +212,7 @@ return res.status(400).json({success:false,message:"password not match"})
 }
 
 
+
 export const checkAuth = async (req, res) => {
 	try {
 		const user = await User.findById(req.userId).select("-password");
