@@ -47,6 +47,22 @@ className='max-w-md w-full mx-auto mt-10 p-8 bg-gray-900 bg-opacity-80 backdrop-
 							day: "numeric",
 						})}
 					</p>
+					<p className='text-gray-300'>
+						<span className='font-bold'>Name: </span>
+						{user.name} <br></br>
+						<span className='font-bold'>Email: </span>
+						{user.email} <br></br>
+					
+						<span className='font-bold'>Last login: </span>
+						{new Date(user.lastLogin).toLocaleDateString("en-US", {
+							year: "numeric",
+							month: "long",
+							day: "numeric",
+						})}
+          
+					</p>
+
+
     </motion.div>
   </div>
 
