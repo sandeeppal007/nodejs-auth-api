@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
-import { Mail, Lock,Loader } from "lucide-react";
+import { Mail, Lock, Loader } from "lucide-react";
 import { Link } from "react-router-dom";
 import Input from "../components/Input.jsx";
 import { useAuthStore } from "../store/authStore.js";
@@ -8,16 +8,12 @@ import { useAuthStore } from "../store/authStore.js";
 const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const {login,isLoading,error} = useAuthStore();
+  const { login, isLoading, error } = useAuthStore();
 
-
-
-
-  const handleLogin = async(e) =>{
-e.preventDefault();
-await login(email,password)
-
-  }
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    await login(email, password);
+  };
 
   return (
     <motion.div
@@ -47,14 +43,15 @@ await login(email,password)
           />
 
           <div className="flex items-center-mb-6">
-            <Link to="/forgot-password" className="text-sm text-green-400 hove:underline">
-            Forgot Password?
-
-            
+            <Link
+              to="/forgot-password"
+              className="text-sm text-green-400 hove:underline"
+            >
+              Forgot Password?
             </Link>
           </div>
 
-{error && <p className="text-red-500 font-semibold mb-2">{error} </p>}
+          {error && <p className="text-red-500 font-semibold mb-2">{error} </p>}
 
           <motion.button
             className="
@@ -67,7 +64,11 @@ await login(email,password)
             whileTop={{ scale: 0.98 }}
             disabled={isLoading}
           >
-           {isLoading ? <Loader className='w-6 h-6 animate-spin mx-auto'/> : "Login"}
+            {isLoading ? (
+              <Loader className="w-6 h-6 animate-spin mx-auto" />
+            ) : (
+              "Login"
+            )}
           </motion.button>
         </form>
       </div>

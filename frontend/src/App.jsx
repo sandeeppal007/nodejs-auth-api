@@ -9,6 +9,7 @@ import { useAuthStore } from "./store/authStore"
 import { useEffect } from "react"
 import Dashborad from "./pages/Dashborad"
 import LoadingSpinner from "./components/LoadingSpinner"
+import ForgotPassword from "./pages/ForgotPassword"
 
 
 // redirect 
@@ -94,19 +95,24 @@ if(isCheckingAuth) return <LoadingSpinner/>
       }
           
           />
-    
-      <Route path="/verify-email" element={
-
-        
-        <EmailVerification/>
-        
-        }/>
-
-      <Route path="/login" element={
+           <Route path="/login" element={
         <RedirectAuthenticatedUser>
           <LoginPage/>
         </RedirectAuthenticatedUser>
       }/>
+    
+      <Route path="/verify-email" element={<EmailVerification/>}/>
+      <Route path="/forgot-password" element={
+        <RedirectAuthenticatedUser>
+        <ForgotPassword/>
+        </RedirectAuthenticatedUser>
+
+        
+        
+        
+        }/>
+
+     
      </Routes>
      <Toaster/>
 

@@ -66,6 +66,28 @@ className='max-w-md w-full mx-auto mt-10 p-8 bg-gray-900 bg-opacity-80 backdrop-
     </motion.div>
   </div>
 
+  <motion.div
+
+  initial={{opacity:0,y:20}}
+  animate={{opacity:1,y:0}}
+  transition={{delay:0.6}}
+  className='mt-4'
+  >
+<motion.button 
+
+whileHover={{scale:1.05}}
+whileTap={{scale:0.95}}
+onClick={handleLogout}
+className='w-full py-3 px-4 bg-gradient-to-r from-green-500 to-emerald-600 text-white font-bold rounded-shadow-lg hover:from-green-600 hover:to-emerald-700 focus:ouline-none focus:ring-2
+focus:ring-green-500 focus-offser-2 focus:ring-offset-gray-900'
+>
+Logout
+
+</motion.button>
+
+
+  </motion.div>
+
 
 
 
