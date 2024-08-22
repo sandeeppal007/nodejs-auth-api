@@ -46,7 +46,7 @@ console.log("email send succesfully",response)
   }
 };
 
-export const sendForgotPasswordEmail = async(email,resetToken)=>{
+export const sendForgotPasswordEmail = async(email,resetURl)=>{
   const recipent = [{email}];
 try {
 
@@ -54,7 +54,7 @@ try {
     from:sender,
     to:recipent,
     subject:"Reset Password",
-    html:PASSWORD_RESET_REQUEST_TEMPLATE.replace("{resetURL}",`http://locahost/api/auth/forgot-password/${resetToken}`)
+    html:PASSWORD_RESET_REQUEST_TEMPLATE.replace("{resetURL}",resetURl)
 
   })
 

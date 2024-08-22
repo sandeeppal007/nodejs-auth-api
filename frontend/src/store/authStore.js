@@ -1,7 +1,8 @@
 import { create } from "zustand";
 import axios from "axios";
+import ForgotPassword from "../pages/ForgotPassword";
 
-const API_URL = "http://localhost:5000/api/auth"
+const API_URL = "http://localhost:3000/api/auth"
 
 axios.defaults.withCredentials = true;
 
@@ -73,6 +74,33 @@ export const useAuthStore = create((set) => ({
 		console.log(error)
 
 		}
-	}
+	},
+	ForgotPassword:async(email)=>{
+		set({isLoading:true,error:null,message:null});
+		try {
+
+			const response = await axios.post(`${API_URL}/forgot-password`,{email})
+			set({message:response.data.message,isLoading:false})
+
+			
+		} catch (error) {
+			set({isLoading:false, error:error.response.data.message || "Error sending reset passworkd email"});
+			throw error
+		}
+	},
+	resetPassword: async (token, password) => {
+		set({ isLoading: true, error: null });
+		try {
+			const response = await axios.post(`${API_URL}/forgot-password/${token}`, { password });
+			set({ message: response.data.message, isLoading: false });
+		} catch (error) {
+			set({
+				isLoading: false,
+				error: error.response.data.message || "Error resetting password",
+			});
+			throw error;
+		}
+	},
+
 	
 }));

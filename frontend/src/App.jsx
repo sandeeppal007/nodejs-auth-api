@@ -3,13 +3,14 @@ import EmailVerification from "./pages/EmailVerification"
 
 import LoginPage from "./pages/LoginPage"
 import SignUpPage from "./pages/SignUpPage"
-import {Navigate, replace, Route,Routes} from "react-router-dom"
+import {Navigate, Route,Routes} from "react-router-dom"
 import { Toaster } from "react-hot-toast"
 import { useAuthStore } from "./store/authStore"
 import { useEffect } from "react"
 import Dashborad from "./pages/Dashborad"
 import LoadingSpinner from "./components/LoadingSpinner"
 import ForgotPassword from "./pages/ForgotPassword"
+import ResetPasswordPage from "./pages/ResetPasswordPage"
 
 
 // redirect 
@@ -101,7 +102,19 @@ if(isCheckingAuth) return <LoadingSpinner/>
         </RedirectAuthenticatedUser>
       }/>
     
-      <Route path="/verify-email" element={<EmailVerification/>}/>
+      <Route path="/verify-email" element={
+           
+
+           <RedirectAuthenticatedUser>
+
+      
+        <EmailVerification/>
+        </RedirectAuthenticatedUser>
+        
+      
+      }/>
+      
+
       <Route path="/forgot-password" element={
         <RedirectAuthenticatedUser>
         <ForgotPassword/>
@@ -111,6 +124,23 @@ if(isCheckingAuth) return <LoadingSpinner/>
         
         
         }/>
+
+<Route
+					path='/forgot-password/:token'
+					element={
+						<RedirectAuthenticatedUser>
+							<ResetPasswordPage />
+						</RedirectAuthenticatedUser>
+					}
+				/>
+
+{/* catch all routes */}
+<Route
+					path='*'
+					element={
+						<Navigate to="/" replace/>
+					}
+				/>
 
      
      </Routes>

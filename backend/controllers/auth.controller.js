@@ -1,5 +1,6 @@
 
 import bcryptjs from "bcryptjs";
+import crypto from "crypto"
 
 import { User } from "../models/user.model.js";
 import { generateTokenAndSetCookie,generateResetPasswordToken } from "../utils/generateTokenAndSetCookies.js";
@@ -8,6 +9,7 @@ import { sendWelcomeEmail } from "../mailtrap/email.js";
 
 export const signup = async (req, res) => {
   const { email, name, password } = req.body;
+
   console.log(email)
 
   try {
@@ -147,7 +149,7 @@ export const forgotPassword = async (req,res)=>{
       return res.status(400).json({succeess:false,message:"Email id not registred"})
     }
 
- const resetToken= await bcryptjs.hash("helloworlds123", 10);
+ const resetToken= crypto.randomBytes(20).toString("hex");
 const resetPasswordTokenExpiresAt = Date.now() + 1 * 60 * 60 * 1000;
 
 
@@ -156,7 +158,7 @@ console.log("resetToken",resetToken)
  user.resetPasswordExpiresAt= resetPasswordTokenExpiresAt;
 
  await user.save();
- sendForgotPasswordEmail(email,resetToken);
+ sendForgotPasswordEmail(email,`${process.env.CLIENT_URL}/forgot-password/${resetToken}`);
 
 
  res.status(200).json({
@@ -174,11 +176,11 @@ console.log("resetToken",resetToken)
 
 export const forgotPasswordToken = async(req,res)=>{
   const resetToken = req.params.token;
+  console.log(req.body)
 
-  const {newPassword,confirmPassword} = req.body;
-  console.log(newPassword)
-  console.log(confirmPassword)
-  if(!(newPassword===confirmPassword) || !newPassword || !confirmPassword){
+  const {password} = req.body;
+
+  if(!password){
 return res.status(400).json({success:false,message:"password not match"})
   }
 
@@ -191,7 +193,7 @@ return res.status(400).json({success:false,message:"password not match"})
       return res.status(400).json({succeess:false,message:"token not found"})
     }
 
-    const hashPassword = await bcryptjs.hash(confirmPassword, 10);
+    const hashPassword = await bcryptjs.hash(password, 10);
 
     user.password = hashPassword;
     user.resetPasswordToken = undefined;
@@ -210,6 +212,7 @@ return res.status(400).json({success:false,message:"password not match"})
   }
 
 }
+
 
 
 
